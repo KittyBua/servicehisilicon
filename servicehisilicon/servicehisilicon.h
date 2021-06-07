@@ -172,6 +172,24 @@ public:
 	void setAC3Delay(int);
 	void setPCMDelay(int);
 
+	struct audioStream
+	{
+		int type;
+		int pid;
+		std::string language_code; /* iso-639, if available. */
+		audioStream()
+		{
+		}
+	};
+	struct subtitleStream
+	{
+		int type;
+		std::string language_code; /* iso-639, if available. */
+		int id;
+		subtitleStream()
+		{
+		}
+	};
 	struct bufferInfo
 	{
 		int bufferPercent;
@@ -221,6 +239,8 @@ private:
 	int m_currentSubtitleStream;
 	int m_cachedSubtitleStream;
 	int selectAudioStream(int i);
+	std::vector<audioStream> m_audioStreams;
+	std::vector<subtitleStream> m_subtitleStreams;
 	iSubtitleUser *m_subtitle_widget;
 	friend class eServiceFactoryHisilicon;
 	eServiceReference m_ref;

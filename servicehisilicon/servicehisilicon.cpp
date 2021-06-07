@@ -1940,13 +1940,13 @@ RESULT eServiceHisilicon::disableSubtitles()
 
 RESULT eServiceHisilicon::getCachedSubtitle(struct SubtitleTrack &track)
 {
-	std::vector<struct SubtitleTrack> subtitlelist;
-	getSubtitleList(subtitlelist);
+
 	bool autoturnon = eConfigManager::getConfigBoolValue("config.subtitles.pango_autoturnon", true);
+	int m_subtitleStreams_size = (int)m_subtitleStreams.size();
 	if (!autoturnon)
 		return -1;
 
-	if (m_cachedSubtitleStream == -2 && subtitlelist.size())
+	if (m_cachedSubtitleStream == -2 && m_subtitleStreams_size)
 	{
 		m_cachedSubtitleStream = 0;
 		int autosub_level = 5;
@@ -1964,14 +1964,14 @@ RESULT eServiceHisilicon::getCachedSubtitle(struct SubtitleTrack &track)
 		configvalue = eConfigManager::getConfigValue("config.autolanguage.subtitle_autoselect4");
 		if (configvalue != "" && configvalue != "None")
 			autosub_languages.push_back(configvalue);
-		for (unsigned int i = 0; i < subtitlelist.size(); i++)
+		for (int i = 0; i < m_subtitleStreams_size; i++)
 		{
-			if (!subtitlelist[i].language_code.empty())
+			if (!m_subtitleStreams[i].language_code.empty())
 			{
 				int x = 1;
 				for (std::vector<std::string>::iterator it2 = autosub_languages.begin(); x < autosub_level && it2 != autosub_languages.end(); x++, it2++)
 				{
-					if ((*it2).find(subtitlelist[i].language_code) != std::string::npos)
+					if ((*it2).find(m_subtitleStreams[i].language_code) != std::string::npos)
 					{
 						autosub_level = x;
 						m_cachedSubtitleStream = i;
@@ -1982,9 +1982,12 @@ RESULT eServiceHisilicon::getCachedSubtitle(struct SubtitleTrack &track)
 		}
 	}
 
-	if (m_cachedSubtitleStream >= 0 && m_cachedSubtitleStream < (int)subtitlelist.size())
+	if (m_cachedSubtitleStream >= 0 && m_cachedSubtitleStream < m_subtitleStreams_size)
 	{
-		track = subtitlelist[m_cachedSubtitleStream];
+		track.type = 2;
+		track.pid = m_cachedSubtitleStream;
+		track.page_number = int(m_subtitleStreams[m_cachedSubtitleStream].type);
+		track.magazine_number = 0;
 		return 0;
 	}
 	return -1;
