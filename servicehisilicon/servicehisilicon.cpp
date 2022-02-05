@@ -273,6 +273,22 @@ RESULT eStaticServiceHisiliconInfo::getEvent(const eServiceReference &ref, ePtr<
 		equivalentref.path.clear();
 		return eEPGCache::getInstance()->lookupEventTime(equivalentref, start_time, evt);
 	}
+	else // try to read .eit file
+	{
+		size_t pos;
+		ePtr<eServiceEvent> event = new eServiceEvent;
+		std::string filename = ref.path;
+		if ( (pos = filename.rfind('.')) != std::string::npos)
+		{
+			filename.erase(pos + 1);
+			filename += "eit";
+			if (!event->parseFrom(filename, 0))
+			{
+				evt = event;
+				return 0;
+			}
+		}
+	}
 	evt = 0;
 	return -1;
 }
