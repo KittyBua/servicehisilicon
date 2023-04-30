@@ -607,7 +607,6 @@ void eServiceHisilicon::netlink_event(int)
 						{
 							m_buffering = true;
 							m_event((iPlayableService*)this, evBuffering);
-							pause();
 						}
 						break;
 					case 2: /* enough */
