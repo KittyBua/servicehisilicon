@@ -4,7 +4,6 @@
 #include <lib/base/init.h>
 #include <lib/base/nconfig.h>
 #include <lib/base/object.h>
-#include <lib/dvb/dvb.h>
 #include <lib/dvb/db.h>
 #include <lib/dvb/epgcache.h>
 #include <lib/dvb/decoder.h>
@@ -805,20 +804,6 @@ eServiceHisilicon::eServiceHisilicon(eServiceReference ref):
 	}
 
 	nlh = (struct nlmsghdr *)malloc(NLMSG_SPACE(MAX_PAYLOAD));
-	int tmp_fd = -1;
-	tmp_fd = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
-	/* eDebug("[eServiceHisilicon] opened tmp_fd: %d", tmp_fd); */
-	if (tmp_fd == 0)
-	{
-		::close(tmp_fd);
-		tmp_fd = -1;
-		fd0lock = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
-		/* eDebug("[eServiceHisilicon] opening null fd returned: %d", fd0lock); */
-	}
-	if (tmp_fd != -1)
-	{
-		::close(tmp_fd);
-	}
 	m_sn_netlink = eSocketNotifier::create(eApp, netlink_socket, eSocketNotifier::Read);
 	CONNECT(m_sn_netlink->activated, eServiceHisilicon::netlink_event);
 
