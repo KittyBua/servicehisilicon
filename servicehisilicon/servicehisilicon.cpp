@@ -4,7 +4,6 @@
 #include <lib/base/init.h>
 #include <lib/base/nconfig.h>
 #include <lib/base/object.h>
-#include <lib/dvb/dvb.h>
 #include <lib/dvb/db.h>
 #include <lib/dvb/epgcache.h>
 #include <lib/dvb/decoder.h>
